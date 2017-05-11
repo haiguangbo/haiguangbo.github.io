@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Haiguang</title>
-  <subtitle>Hello Code!</subtitle>
+  <title>CodeHuskie</title>
+  <subtitle>Hi, technology!</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haiguangbo.github.io/"/>
-  <updated>2017-05-11T10:06:53.000Z</updated>
+  <updated>2017-05-11T10:32:55.000Z</updated>
   <id>http://haiguangbo.github.io/</id>
   
   <author>
-    <name>Haiguang Bo</name>
+    <name>CodeHuskie</name>
     
   </author>
   
@@ -20,7 +20,7 @@
     <link href="http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/"/>
     <id>http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/</id>
     <published>2016-01-25T22:00:00.000Z</published>
-    <updated>2017-05-11T10:06:53.000Z</updated>
+    <updated>2017-05-11T10:32:55.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="第一章-介绍"><a href="#第一章-介绍" class="headerlink" title="第一章 介绍"></a>第一章 介绍</h3><ol>
 <li><p>线程的优势：</p>
