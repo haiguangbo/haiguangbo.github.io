@@ -1,28 +1,206 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Haiguang</title>
-  <subtitle>Hello Code!</subtitle>
-  <link href="/atom.xml" rel="self"/>
-  
-  <link href="http://haiguangbo.github.io/"/>
-  <updated>2017-05-11T10:06:53.000Z</updated>
-  <id>http://haiguangbo.github.io/</id>
-  
-  <author>
-    <name>Haiguang Bo</name>
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="Java Web, Big Data, Concurrency, Machine Learning">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="Data/Images/avatar.png">
+    <link rel="alternate" type="application/atom+xml" title="Haiguang" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Java并发编程实战笔记｜Haiguang&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('Data/Images/avatar.png')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Haiguang
+                </span> 's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                            
+                                
+                                    
+                                        
+                                                
+                                                    
+                            
+                                
+                                            <li>
+                                                <a href="/Archives/">
+                                                    Archive
+                                                </a>
+                                            </li>
+                                            
+                                                
+                                                    
+                            
+                                
+                                            <li>
+                                                <a href="/Tags/">
+                                                    Tags
+                                                </a>
+                                            </li>
+                                            
+                                                
+                                                    
+
+                                                        
+                                                            <li>
+                                                                <a href="/About">About</a>
+                                                            </li>
+                                                            
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    //    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+
+    function handleMagic(e) {
+        if ($navbar.className.indexOf('in') > 0) {
+            // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function() {
+                // prevent frequently toggle
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            }, 400)
+        } else {
+            // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="./Data/Images/dolovethings.jpg">
+
+
+<style>
     
-  </author>
-  
-  <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Java并发编程实战笔记</title>
-    <link href="http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/"/>
-    <id>http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/</id>
-    <published>2016-01-25T22:00:00.000Z</published>
-    <updated>2017-05-11T10:06:53.000Z</updated>
+    header.intro-header {
+        background-image: url('./Data/Images/dolovethings.jpgundefined')
+    }
+
     
-    <content type="html"><![CDATA[<h3 id="第一章-介绍"><a href="#第一章-介绍" class="headerlink" title="第一章 介绍"></a>第一章 介绍</h3><ol>
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Java并发编程实战笔记</h1>
+                    
+                    <span class="meta">
+                         作者 CodeHuskie
+                        <span>
+                          日期 2016-01-26
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Concurrency"
+                           title="Concurrency">Concurrency</a>
+                        
+                        <a class="tag" href="/tags/#Note"
+                           title="Note">Note</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Java并发编程实战笔记
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h3 id="第一章-介绍"><a href="#第一章-介绍" class="headerlink" title="第一章 介绍"></a>第一章 介绍</h3><ol>
 <li><p>线程的优势：</p>
 <blockquote>
 <ol>
@@ -400,58 +578,209 @@ Amdahl定律告诉我们，程序的可扩张性是由必须连续执行的代�
 规范还规定了要保证操作是按照一种偏序关系进行排序。
 这种关系称为happens-before，它是规定在独立存储器和同步操作的级别之上的。如果缺少充足的同步，线程在访问共享数据时就会发生无法预期的事情。
 然而同步动作，可以不考虑happens-before的底层细节的情况下，也能确保线程安全性。
-</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;第一章-介绍&quot;&gt;&lt;a href=&quot;#第一章-介绍&quot; class=&quot;headerlink&quot; title=&quot;第一章 介绍&quot;&gt;&lt;/a&gt;第一章 介绍&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;线程的优势：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;充分利用多处理器&lt;/li
-    
-    </summary>
-    
-      <category term="Concurrency" scheme="http://haiguangbo.github.io/categories/Concurrency/"/>
-    
-      <category term="Note" scheme="http://haiguangbo.github.io/categories/Concurrency/Note/"/>
-    
-    
-      <category term="Concurrency" scheme="http://haiguangbo.github.io/tags/Concurrency/"/>
-    
-      <category term="Note" scheme="http://haiguangbo.github.io/tags/Note/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hexo manual</title>
-    <link href="http://haiguangbo.github.io/2015/05/26/hexomanual/"/>
-    <id>http://haiguangbo.github.io/2015/05/26/hexomanual/</id>
-    <published>2015-05-25T22:00:00.000Z</published>
-    <updated>2017-05-11T10:06:55.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
-    
-    </summary>
-    
-      <category term="manual" scheme="http://haiguangbo.github.io/categories/manual/"/>
-    
-    
-      <category term="manual" scheme="http://haiguangbo.github.io/tags/manual/"/>
-    
-  </entry>
-  
-</feed>
+</code></pre>
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2015/05/26/hexomanual/" data-toggle="tooltip" data-placement="top"
+                           title="Hexo manual">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一章-介绍"><span class="toc-text">第一章 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二章-线程安全"><span class="toc-text">第二章 线程安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三章-共享对象"><span class="toc-text">第三章 共享对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四章-组合对象"><span class="toc-text">第四章 组合对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五章-构造块"><span class="toc-text">第五章 构造块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第六章-任务执行"><span class="toc-text">第六章 任务执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第七章-取消和关闭"><span class="toc-text">第七章 取消和关闭</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第八章-应用线程池"><span class="toc-text">第八章 应用线程池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第九章-GUI应用程序"><span class="toc-text">第九章 GUI应用程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十章-避免活性危险"><span class="toc-text">第十章 避免活性危险</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十一章-性能和可扩展性"><span class="toc-text">第十一章 性能和可扩展性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十二章-测试并发程序"><span class="toc-text">第十二章 测试并发程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十三章-显式锁"><span class="toc-text">第十三章 显式锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十四章-构建自定义的同步工具"><span class="toc-text">第十四章 构建自定义的同步工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十五章-原子变量与非阻塞同步机制"><span class="toc-text">第十五章 原子变量与非阻塞同步机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第十六章-Java存储模型"><span class="toc-text">第十六章 Java存储模型</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Concurrency"
+                           title="Concurrency">Concurrency</a>
+                        
+                        <a class="tag" href="/tags/#Note"
+                           title="Note">Note</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://haiguangbo.github.com">公园里的小石头</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                    
+                            
+                                    
+
+                                            
+
+                                                    
+
+                                                            
+                                                                <li>
+                                                                    <a target="_blank" href="https://github.com/haiguangbo">
+                                                                        <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                                                                    </a>
+                                                                </li>
+                                                                
+
+                                                                    
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy;
+                    Haiguang
+                        2017
+                            <!--
+                            <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                            -->
+                            <br> Powered by Hexo
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="/js/blog.js"></script>
+
+            <!-- async load function -->
+            <script>
+                function async(u, c) {
+                    var d = document,
+                        t = 'script',
+                        o = d.createElement(t),
+                        s = d.getElementsByTagName(t)[0];
+                    o.src = u;
+                    if (c) {
+                        o.addEventListener('load', function(e) {
+                            c(null, e);
+                        }, false);
+                    }
+                    s.parentNode.insertBefore(o, s);
+                }
+            </script>
+
+            <!-- jquery.tagcloud.js -->
+            <script>
+                // only load tagcloud.js in tag.html
+                if ($('#tag_cloud').length !== 0) {
+                    async("http://haiguangbo.github.io/js/jquery.tagcloud.js", function() {
+                        $.fn.tagcloud.defaults = {
+                            //size: {start: 1, end: 1, unit: 'em'},
+                            color: {
+                                start: '#bbbbee',
+                                end: '#0085a1'
+                            },
+                        };
+                        $('#tag_cloud a').tagcloud();
+                    })
+                }
+            </script>
+
+            <!--fastClick.js -->
+            <script>
+                async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function() {
+                    var $nav = document.querySelector("nav");
+                    if ($nav) FastClick.attach($nav);
+                })
+            </script>
+
+            <!-- Google Analytics -->
+
+            
+
+                    <!-- Baidu Tongji -->
+                    
+
+                            <!-- swiftype -->
+                            <script type="text/javascript">
+                                (function(w, d, t, u, n, s, e) {
+                                    w['SwiftypeObject'] = n;
+                                    w[n] = w[n] || function() {
+                                        (w[n].q = w[n].q || []).push(arguments);
+                                    };
+                                    s = d.createElement(t);
+                                    e = d.getElementsByTagName(t)[0];
+                                    s.async = 1;
+                                    s.src = u;
+                                    e.parentNode.insertBefore(s, e);
+                                })(window, document, 'script', '//s.swiftypecdn.com/install/v2/st.js', '_st');
+
+                                _st('install', 'null', '2.0.0');
+                            </script>
+
+                            <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!--wechat title img-->
+<img class="wechat-title-img" src="Data/Images/avatar.png">
+</body>
+
+</html>
