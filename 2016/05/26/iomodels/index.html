@@ -22,7 +22,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://haiguangbo.github.io/2016/01/26/iomodels/">
+    <link rel="canonical" href="http://haiguangbo.github.io/2016/05/26/iomodels/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -171,16 +171,16 @@
                     <span class="meta">
                          作者 CodeHuskie
                         <span>
-                          日期 2016-01-26
+                          日期 2016-05-26
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#Note"
-                           title="Note">Note</a>
-                        
                         <a class="tag" href="/tags/#IO"
                            title="IO">IO</a>
+                        
+                        <a class="tag" href="/tags/#Note"
+                           title="Note">Note</a>
                         
                     </div>
                 </div>
@@ -238,31 +238,31 @@
 </ul>
 <ol>
 <li><p>阻塞式IO模式</p>
-<p> <img src="../Data/article_attach/iomodels/blockingio.png" alt="blockingiomodel"></p>
+<p> <img src="/2016/05/26/iomodels/blockingio.png" alt="blockingiomodel"></p>
 <p>  进程调用recvfrom, 系统调用直到数据报到达并复制到缓冲区中或者发生错误才会返回，因此说进程在调用recvfrom开始即被阻塞，直到数据返回成功进程才开始处理数据报。</p>
 </li>
 <li><p>非阻塞式IO</p>
-<p> <img src="../Data/article_attach/iomodels/nonblockingio.png" alt="nonblockingiomodel"></p>
+<p> <img src="/2016/05/26/iomodels/nonblockingio.png" alt="nonblockingiomodel"></p>
 <p> 前三次调用recvfrom时并没有数据返回，因此内核返回一个EWOULDBLOCK的错误，第四次调用recvfrom时因数据报已准备好，复制数据到应用缓冲区，并成功返回。当一个进程不断对一个非阻塞描述符循环调用recvfrom时，则称之为轮询（polling）</p>
 </li>
 <li><p>IO复用模型</p>
 <p> IO复用（IO Multiplexing）, 可使用select/poll，使阻塞真正发生在select/poll端，而非真正的IO系统调用上。如下图所示：</p>
-<p> <img src="../Data/article_attach/iomodels/iomultiplexing.png" alt="iomultiplexing"></p>
+<p> <img src="/2016/05/26/iomodels/iomultiplexing.png" alt="iomultiplexing"></p>
 <p> 真正的阻塞发生在select端，select端为recvfrom返回可读条件，recvfrom收到条件时进行数据报复制到缓冲区的操作。select允许有多个描述符，因此提供了更好的并发特性。</p>
 </li>
 <li><p>信号驱动式IO</p>
 <p> 使用信号，让内核在描述符就绪时发送SIGIO信号通知我们，如下图所示：</p>
-<p> <img src="../Data/article_attach/iomodels/signal-drivenio.png" alt="signal-drivenio"></p>
+<p> <img src="/2016/05/26/iomodels/signal-drivenio.png" alt="signal-drivenio"></p>
 <p> 通过开启socket的信号驱动式IO功能，通过sigaction系统安装信号处理函数，系统调用将立即返回，进程没有被阻塞。当内核发送数据已准备好的SIGIO信号时，由信号处理函数继续处理。优势在于等待数据报到达期间不需要阻塞。</p>
 </li>
 <li><p>异步IO模型</p>
 <p> 根据POSIX标准所提供的一系列函数，提供了如下工作机制：告知内核启动某个操作，并让内核在整个操作（包括数据从内核复制到用户自己缓冲区）完成后通知我们。与信号驱动IO的区别主要在于通知的时间，信号驱动通知我们何时可以启动一个IO操作，而异步IO是由内核通知我们IO操作何时完成。</p>
 </li>
 </ol>
-<pre><code>![aio](../Data/article_attach/iomodels/aio.png)
+<pre><code>![aio](iomodels/aio.png)
 </code></pre><ul>
 <li><p>对比</p>
-<p>  <img src="../Data/article_attach/iomodels/iocompare.png" alt="iocompare"></p>
+<p>  <img src="/2016/05/26/iomodels/iocompare.png" alt="iocompare"></p>
 <p>  如上图所示， 前四种io模型的区别主要在于第一阶段，第二阶段都是要完成数据从内核到缓冲区的复制；而异步IO模型在两个阶段都需要进行处理。</p>
 <ul>
 <li>同步IO操作（synchronous I/O operation）：导致请求进程阻塞，直到I/O操作完成；</li>
@@ -278,15 +278,10 @@
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2016/01/26/javaconcurrencyinpracticenote/" data-toggle="tooltip" data-placement="top"
-                           title="Java并发编程实战笔记">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2015/05/26/hexomanual/" data-toggle="tooltip" data-placement="top"
-                           title="Hexo manual">Next Post &rarr;</a>
+                        <a href="/2016/01/26/javaconcurrencyinpracticenote/" data-toggle="tooltip" data-placement="top"
+                           title="Java并发编程实战笔记">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -324,11 +319,11 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#Note"
-                           title="Note">Note</a>
-                        
                         <a class="tag" href="/tags/#IO"
                            title="IO">IO</a>
+                        
+                        <a class="tag" href="/tags/#Note"
+                           title="Note">Note</a>
                         
                     </div>
                 </section>
