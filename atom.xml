@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haiguangbo.github.io/"/>
-  <updated>2017-05-19T04:26:22.000Z</updated>
+  <updated>2017-05-19T04:32:25.000Z</updated>
   <id>http://haiguangbo.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://haiguangbo.github.io/2016/05/26/iomodels/"/>
     <id>http://haiguangbo.github.io/2016/05/26/iomodels/</id>
     <published>2016-05-26T11:00:00.000Z</published>
-    <updated>2017-05-19T04:26:22.000Z</updated>
+    <updated>2017-05-19T04:32:25.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="理解同步与异步、阻塞与非阻塞"><a href="#理解同步与异步、阻塞与非阻塞" class="headerlink" title="理解同步与异步、阻塞与非阻塞"></a>理解同步与异步、阻塞与非阻塞</h1><p>对于大部分服务端应用的开发，都会或多或少涉及到IO、数据、线程等，诸如IO，JAVA即提供了IO、NIO、AIO; Javascript提供了Ajax; Node.js提供event-driven的模型。而对于这些模型的内部运行机制、原理，每个开发人员都应该够有所理解，『学非探其花，要自拔其根』，某一项技能的掌握的确很重要，但原理方面的内功修为同样不可或缺，这篇文章针对IO中的同步、异步、阻塞、非阻塞的概念作一些梳理与总结。</p>
 <p>首先，取一个来自网络的场景来作直观的描述与分析：</p>
@@ -79,10 +79,10 @@
 </li>
 <li><p>异步IO模型</p>
 <p> 根据POSIX标准所提供的一系列函数，提供了如下工作机制：告知内核启动某个操作，并让内核在整个操作（包括数据从内核复制到用户自己缓冲区）完成后通知我们。与信号驱动IO的区别主要在于通知的时间，信号驱动通知我们何时可以启动一个IO操作，而异步IO是由内核通知我们IO操作何时完成。</p>
+<p>  <img src="/2016/05/26/iomodels/aio.png" alt="aio"></p>
 </li>
 </ol>
-<pre><code>![aio](iomodels/aio.png)
-</code></pre><ul>
+<ul>
 <li><p>对比</p>
 <p>  <img src="/2016/05/26/iomodels/iocompare.png" alt="iocompare"></p>
 <p>  如上图所示， 前四种io模型的区别主要在于第一阶段，第二阶段都是要完成数据从内核到缓冲区的复制；而异步IO模型在两个阶段都需要进行处理。</p>
