@@ -176,9 +176,6 @@
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#Note"
-                           title="Note">Note</a>
-                        
                         <a class="tag" href="/tags/#Concurrency"
                            title="Concurrency">Concurrency</a>
                         
@@ -409,9 +406,10 @@ Executor框架有助于分离任务的提交和任务的执行策略，同时还
 <li>shutdownNow的局限性：它试图取消正在进行的任务，并返回那些等待执行的任务的清单，但是我们没法找出那些已经开始执行、却没有结束的任务，这需要自己处理。</li>
 <li>在一个长时间运行的应用程序中，所有的程序都要给未捕获异常设置一个处理器，这个处理器至少要将异常信息记入日志中。</li>
 <li>线程分为两种：普通线程和守护线程。两者的区别是：当一个线程退出时，所有仍然存在的守护线程都会被抛弃——不会执行finally块，也不会释放栈——JVM直接退出。</li>
-<li>管理资源避免使用finalizer。在大多数情况下，使用finally块和显式close方法结合来管理资源，会比使用finalizer起到更好的作用。</li>
+<li><p>管理资源避免使用finalizer。在大多数情况下，使用finally块和显式close方法结合来管理资源，会比使用finalizer起到更好的作用。</p>
+<p>总结<br>任务、线程、服务以及应用程序在生命周期结束时的问题，可能会导致向它们引入复杂的设计和实现。<br>Java没有提供具有明显优势的机制来取消活动或者终结线程。<br>它提供了协作的中断机制，能够用来帮助取消，但是这将取决你如何构建取消的协议，并是否能一致的使用该协议。<br>使用FutureTask和Executor框架可以简化构建可取消的任务和服务。</p>
+</li>
 </ol>
-<p>总结<br>    任务、线程、服务以及应用程序在生命周期结束时的问题，可能会导致向它们引入复杂的设计和实现。<br>    Java没有提供具有明显优势的机制来取消活动或者终结线程。<br>    它提供了协作的中断机制，能够用来帮助取消，但是这将取决你如何构建取消的协议，并是否能一致的使用该协议。<br>    使用FutureTask和Executor框架可以简化构建可取消的任务和服务。</p>
 <h3 id="第八章-应用线程池"><a href="#第八章-应用线程池" class="headerlink" title="第八章 应用线程池"></a>第八章 应用线程池</h3><ol>
 <li>一些任务具有这样的特征：需要或者排斥某种特定的执行策略。对其他任务具有依赖性的任务，就会要求线程池足够大，来保证任务不必排队或者不被拒绝；采用线程限制的任务需要顺序的执行。把这些需求都写入文档，这样将来的维护者就不会使用一个与原来相悖的执行策略，而破坏安全性或活性。</li>
 <li>在线程池中，如果一个任务依赖其他任务的执行，而线程池不是足够大，这时就可能出现线程饥饿和死锁。<br>无论何时，你提交一个非独立的Executor任务，要明确出现线程饥饿和死锁的可能性，并且在代码或者配置文件以及其他可以配置Executor的地方，任务有关池的大小和配置约束都要写入文档。<br>耗时任务会造成线程池堵塞，还会拖长服务时间，即使小任务也不能幸免。有一项技术可以用来缓解好使操作带来的影响，这就是限定任务等待资源的时间，而不是无限制地等待下去。</li>
@@ -579,14 +577,14 @@ Amdahl定律告诉我们，程序的可扩张性是由必须连续执行的代�
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/01/26/mysqlnote1/" data-toggle="tooltip" data-placement="top"
-                           title="MySQL数据操作-数据查重与去重">&larr; Previous Post</a>
+                        <a href="/2016/02/26/singletonlearn/" data-toggle="tooltip" data-placement="top"
+                           title="Singleton-看似简单，内藏玄机">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2015/05/26/hexomanual/" data-toggle="tooltip" data-placement="top"
-                           title="Hexo manual">Next Post &rarr;</a>
+                        <a href="/2016/01/26/mysqlnote1/" data-toggle="tooltip" data-placement="top"
+                           title="MySQL数据操作-数据查重与去重">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -623,9 +621,6 @@ Amdahl定律告诉我们，程序的可扩张性是由必须连续执行的代�
                         <a href="/tags/">FEATURED TAGS</a>
                     </h5>
                     <div class="tags">
-                        
-                        <a class="tag" href="/tags/#Note"
-                           title="Note">Note</a>
                         
                         <a class="tag" href="/tags/#Concurrency"
                            title="Concurrency">Concurrency</a>
