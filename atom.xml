@@ -168,6 +168,46 @@
   </entry>
   
   <entry>
+    <title>MySQL数据操作-数据查重与去重</title>
+    <link href="http://haiguangbo.github.io/2016/01/26/mysqlnote1/"/>
+    <id>http://haiguangbo.github.io/2016/01/26/mysqlnote1/</id>
+    <published>2016-01-26T12:00:00.000Z</published>
+    <updated>2017-10-10T09:33:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="MySQL查询重复记录的方法"><a href="#MySQL查询重复记录的方法" class="headerlink" title="MySQL查询重复记录的方法"></a>MySQL查询重复记录的方法</h1><p><strong>MySQL</strong>中重复的数据记录有时会为我们带来困扰，因此查询并处理重复数据显得尤为重要。</p>
+<ol>
+<li><p>查找表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from people   </div><div class="line">where peopleId in </div><div class="line">(select peopleId from people group by peopleId having count(peopleId) &gt; 1</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断，只留有rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from people   </div><div class="line">where peopleId in (select peopleId from people group by peopleId   having count(peopleId) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from people group by peopleId having count(peopleId )&gt;1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>查找表中多余的重复记录(多个字段)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除表中多余的重复记录（多个字段），只留有rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>查找表中多余的重复记录（多个字段），不包含rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;MySQL查询重复记录的方法&quot;&gt;&lt;a href=&quot;#MySQL查询重复记录的方法&quot; class=&quot;headerlink&quot; title=&quot;MySQL查询重复记录的方法&quot;&gt;&lt;/a&gt;MySQL查询重复记录的方法&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;MySQL&lt;/strong&gt;
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://haiguangbo.github.io/categories/MySQL/"/>
+    
+    
+      <category term="MySQL" scheme="http://haiguangbo.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java并发编程实战笔记</title>
     <link href="http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/"/>
     <id>http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/</id>
@@ -563,46 +603,6 @@ Amdahl定律告诉我们，程序的可扩张性是由必须连续执行的代�
     
     
       <category term="Concurrency" scheme="http://haiguangbo.github.io/tags/Concurrency/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL数据操作-数据查重与去重</title>
-    <link href="http://haiguangbo.github.io/2016/01/26/mysqlnote1/"/>
-    <id>http://haiguangbo.github.io/2016/01/26/mysqlnote1/</id>
-    <published>2016-01-26T12:00:00.000Z</published>
-    <updated>2017-10-10T09:33:16.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="MySQL查询重复记录的方法"><a href="#MySQL查询重复记录的方法" class="headerlink" title="MySQL查询重复记录的方法"></a>MySQL查询重复记录的方法</h1><p><strong>MySQL</strong>中重复的数据记录有时会为我们带来困扰，因此查询并处理重复数据显得尤为重要。</p>
-<ol>
-<li><p>查找表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from people   </div><div class="line">where peopleId in </div><div class="line">(select peopleId from people group by peopleId having count(peopleId) &gt; 1</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断，只留有rowid最小的记录</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from people   </div><div class="line">where peopleId in (select peopleId from people group by peopleId   having count(peopleId) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from people group by peopleId having count(peopleId )&gt;1)</div></pre></td></tr></table></figure>
-</li>
-<li><p>查找表中多余的重复记录(多个字段)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除表中多余的重复记录（多个字段），只留有rowid最小的记录</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
-</li>
-<li><p>查找表中多余的重复记录（多个字段），不包含rowid最小的记录</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;MySQL查询重复记录的方法&quot;&gt;&lt;a href=&quot;#MySQL查询重复记录的方法&quot; class=&quot;headerlink&quot; title=&quot;MySQL查询重复记录的方法&quot;&gt;&lt;/a&gt;MySQL查询重复记录的方法&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;MySQL&lt;/strong&gt;
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://haiguangbo.github.io/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://haiguangbo.github.io/tags/MySQL/"/>
     
   </entry>
   
