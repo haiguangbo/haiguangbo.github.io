@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Tags｜CodeHuskie&#39;s blog
+        MySQL数据操作-数据查重与去重｜CodeHuskie&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="http://haiguangbo.github.io/Tags/">
+    <link rel="canonical" href="http://haiguangbo.github.io/2016/01/26/mysqlnote1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -43,7 +43,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="false" data-istags="false
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
 " data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -144,173 +144,156 @@
     }
 </script>
 <!-- Main Content -->
---- layout: layout ---
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="./Data/Images/dolovethings.jpg">
+
+
 <style>
-    .intro-header .site-heading {
-        margin: 50px;
-    }
     
-    .container {
-        margin: 50px;
+    header.intro-header {
+        background-image: url('./Data/Images/dolovethings.jpgundefined')
     }
+
+    
 </style>
 
-<!-- Page Header -->
-<!--
 <header class="intro-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading text-center">
-                    <h1>Tags</h1>
-                    <span class="subheading">Hi, technology!</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>MySQL数据操作-数据查重与去重</h1>
+                    
+                    <span class="meta">
+                         作者 CodeHuskie
+                        <span>
+                          日期 2016-01-26
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#MySQL"
+                           title="MySQL">MySQL</a>
+                        
+                        <a class="tag" href="/tags/#Note"
+                           title="Note">Note</a>
+                        
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            MySQL数据操作-数据查重与去重
+        </span>
     </div>
 </header>
--->
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <!-- 标签云 -->
-            <div id='tag_cloud' class="tags">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="MySQL查询重复记录的方法"><a href="#MySQL查询重复记录的方法" class="headerlink" title="MySQL查询重复记录的方法"></a>MySQL查询重复记录的方法</h1><p><strong>MySQL</strong>中重复的数据记录有时会为我们带来困扰，因此查询并处理重复数据显得尤为重要。</p>
+<ol>
+<li><p>查找表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from people   </div><div class="line">where peopleId in </div><div class="line">(select peopleId from people group by peopleId having count(peopleId) &gt; 1</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断，只留有rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from people   </div><div class="line">where peopleId in (select peopleId from people group by peopleId   having count(peopleId) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from people group by peopleId having count(peopleId )&gt;1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>查找表中多余的重复记录(多个字段)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除表中多余的重复记录（多个字段），只留有rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>查找表中多余的重复记录（多个字段），不包含rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+                <hr>
                 
-                    <a href="#MySQL" title="MySQL" rel="1">
-                        MySQL
-                    </a>
+
+                <ul class="pager">
                     
-                    <a href="#Note" title="Note" rel="3">
-                        Note
-                    </a>
+                    <li class="previous">
+                        <a href="/2016/02/26/singletonlearn/" data-toggle="tooltip" data-placement="top"
+                           title="单例模式Singleton-看似简单，内藏玄机">&larr; Previous Post</a>
+                    </li>
                     
-                    <a href="#manual" title="manual" rel="1">
-                        manual
-                    </a>
                     
-                    <a href="#Design Pattern" title="Design Pattern" rel="1">
-                        Design Pattern
-                    </a>
+                    <li class="next">
+                        <a href="/2016/01/26/javaconcurrencyinpracticenote/" data-toggle="tooltip" data-placement="top"
+                           title="Java并发编程实战笔记">Next Post &rarr;</a>
+                    </li>
                     
-                    <a href="#Concurrency" title="Concurrency" rel="1">
-                        Concurrency
-                    </a>
-                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
             </div>
 
-            <!-- 标签列表 -->
-            
-                <div class="one-tag-list">
-                    <span class="fa fa-tag listing-seperator" id="MySQL">
-                    <span class="tag-text">MySQL</span>
-                    </span>
-                    
-                        <div class="post-preview">
-                            <a href="/2016/01/26/mysqlnote1/">
-                                <h2 class="post-title">
-                                    MySQL数据操作-数据查重与去重
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
-                        
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL查询重复记录的方法"><span class="toc-text">MySQL查询重复记录的方法</span></a></li></ol>
                 </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
                 
-                <div class="one-tag-list">
-                    <span class="fa fa-tag listing-seperator" id="Note">
-                    <span class="tag-text">Note</span>
-                    </span>
-                    
-                        <div class="post-preview">
-                            <a href="/2016/01/26/mysqlnote1/">
-                                <h2 class="post-title">
-                                    MySQL数据操作-数据查重与去重
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
                         
-                        <div class="post-preview">
-                            <a href="/2016/02/26/singletonlearn/">
-                                <h2 class="post-title">
-                                    单例模式Singleton-看似简单，内藏玄机
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
+                        <a class="tag" href="/tags/#MySQL"
+                           title="MySQL">MySQL</a>
                         
-                        <div class="post-preview">
-                            <a href="/2016/01/26/javaconcurrencyinpracticenote/">
-                                <h2 class="post-title">
-                                    Java并发编程实战笔记
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
+                        <a class="tag" href="/tags/#Note"
+                           title="Note">Note</a>
                         
-                </div>
-                
-                <div class="one-tag-list">
-                    <span class="fa fa-tag listing-seperator" id="manual">
-                    <span class="tag-text">manual</span>
-                    </span>
-                    
-                        <div class="post-preview">
-                            <a href="/2015/05/26/hexomanual/">
-                                <h2 class="post-title">
-                                    Hexo manual
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
-                        
-                </div>
-                
-                <div class="one-tag-list">
-                    <span class="fa fa-tag listing-seperator" id="Design Pattern">
-                    <span class="tag-text">Design Pattern</span>
-                    </span>
-                    
-                        <div class="post-preview">
-                            <a href="/2016/02/26/singletonlearn/">
-                                <h2 class="post-title">
-                                    单例模式Singleton-看似简单，内藏玄机
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
-                        
-                </div>
-                
-                <div class="one-tag-list">
-                    <span class="fa fa-tag listing-seperator" id="Concurrency">
-                    <span class="tag-text">Concurrency</span>
-                    </span>
-                    
-                        <div class="post-preview">
-                            <a href="/2016/01/26/javaconcurrencyinpracticenote/">
-                                <h2 class="post-title">
-                                    Java并发编程实战笔记
-                                </h2>
-                                
-                            </a>
-                        </div>
-                        <hr>
-                        
-                </div>
+                    </div>
+                </section>
                 
 
+                <!-- Friends Blog -->
+                
+            </div>
         </div>
+
     </div>
-</div>
+</article>
+
+
+
+
+
+
+
 <!-- Footer -->
 <!-- Footer -->
 <footer>

@@ -294,17 +294,50 @@
 
 <div class="post-preview "
      style="background-image: url('./Data/Images/dolovethings.jpg')">
-    <a href="/2016/05/26/iomodels/">
+    <a href="/2016/02/26/singletonlearn/">
         <h2 class="post-title">
-            理解IO中的同步与异步、阻塞与非阻塞
+            单例模式Singleton-看似简单，内藏玄机
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2016-05-26
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2016-02-26
         </p>
         
         <div class="post-content-preview">
             <p>
-                理解同步与异步、阻塞与非阻塞对于大部分服务端应用的开发，都会或多或少涉及到IO、数据、线程等，诸如IO，JAVA即提供了IO、NIO、AIO; Javascript提供了Ajax; Node.js提供event-driven的模型。而对于这些模型的内部运行机制、原理，每个开发人员都应该够有所..
+                单例模式Singleton-看似简单，内藏玄机单例模式有何特点？
+单例模式只能有一个实例
+单例类必须创建自己的唯一实例
+单例类必须能向其他对象提供这一实例
+
+单例模式VS静态类
+单例可以继承和被继承，方法可以被override，而静态方法不可以。
+静态方法中产生的对象会在执行后被释放，进而被GC..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('./Data/Images/dolovethings.jpg')">
+    <a href="/2016/01/26/mysqlnote1/">
+        <h2 class="post-title">
+            MySQL数据操作-数据查重与去重
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2016-01-26
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                MySQL查询重复记录的方法MySQL中重复的数据记录有时会为我们带来困扰，因此查询并处理重复数据显得尤为重要。
+
+查找表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断：
+select * from people   where peopleId in (select peo..
             </p>
         </div>
     </a>
@@ -442,10 +475,12 @@
                     
                     
                     
-                    
-                    
                     <a href="/tags/#Note" title="Note"
-                       rel="2">Note</a>
+                       rel="3">Note</a>
+                    
+                    
+                    
+                    
                     
                     
                     

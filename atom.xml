@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://haiguangbo.github.io/"/>
-  <updated>2017-05-19T04:32:25.000Z</updated>
+  <updated>2017-10-10T09:31:48.000Z</updated>
   <id>http://haiguangbo.github.io/</id>
   
   <author>
@@ -16,98 +16,107 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>理解IO中的同步与异步、阻塞与非阻塞</title>
-    <link href="http://haiguangbo.github.io/2016/05/26/iomodels/"/>
-    <id>http://haiguangbo.github.io/2016/05/26/iomodels/</id>
-    <published>2016-05-26T11:00:00.000Z</published>
-    <updated>2017-05-19T04:32:25.000Z</updated>
+    <title>单例模式Singleton-看似简单，内藏玄机</title>
+    <link href="http://haiguangbo.github.io/2016/02/26/singletonlearn/"/>
+    <id>http://haiguangbo.github.io/2016/02/26/singletonlearn/</id>
+    <published>2016-02-26T12:00:00.000Z</published>
+    <updated>2017-10-10T09:31:48.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="理解同步与异步、阻塞与非阻塞"><a href="#理解同步与异步、阻塞与非阻塞" class="headerlink" title="理解同步与异步、阻塞与非阻塞"></a>理解同步与异步、阻塞与非阻塞</h1><p>对于大部分服务端应用的开发，都会或多或少涉及到IO、数据、线程等，诸如IO，JAVA即提供了IO、NIO、AIO; Javascript提供了Ajax; Node.js提供event-driven的模型。而对于这些模型的内部运行机制、原理，每个开发人员都应该够有所理解，『学非探其花，要自拔其根』，某一项技能的掌握的确很重要，但原理方面的内功修为同样不可或缺，这篇文章针对IO中的同步、异步、阻塞、非阻塞的概念作一些梳理与总结。</p>
-<p>首先，取一个来自网络的场景来作直观的描述与分析：</p>
-<p>老张爱喝茶，废话不说，煮开水。</p>
-<p>出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。</p>
-<p>1 老张把水壶放到火上，立等水开。（同步阻塞）</p>
-<p>老张觉得自己有点傻</p>
-<p>2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）</p>
-<p>老张还是觉得自己有点傻，于是变高端了，买了把会响笛的那种水壶。水开之后，能大声发出嘀~~~~的噪音。</p>
-<p>3 老张把响水壶放到火上，立等水开。（异步阻塞）</p>
-<p>老张觉得这样傻等意义不大</p>
-<p>4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</p>
-<p>老张觉得自己聪明了。</p>
-<p>所谓同步异步，只是对于水壶而言。</p>
-<p>普通水壶，同步；响水壶，异步。</p>
-<p>虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。</p>
-<p>所谓阻塞非阻塞，仅仅对于老张而言。</p>
-<p>立等的老张，阻塞；看电视的老张，非阻塞。</p>
-<p>情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
-<p>再次，作一点稍微专业一点的描述：</p>
-<p>从分布式系统的角度来解答。</p>
-<ol>
-<li>同步/异步<br>同步和异步关注的是消息通信机制 (synchronous communication/ asynchronous communication)</li>
+    <content type="html"><![CDATA[<h4 id="单例模式Singleton-看似简单，内藏玄机"><a href="#单例模式Singleton-看似简单，内藏玄机" class="headerlink" title="单例模式Singleton-看似简单，内藏玄机"></a>单例模式Singleton-看似简单，内藏玄机</h4><h5 id="单例模式有何特点？"><a href="#单例模式有何特点？" class="headerlink" title="单例模式有何特点？"></a>单例模式有何特点？</h5><ol>
+<li>单例模式只能有一个实例</li>
+<li>单例类必须创建自己的<em>唯一</em>实例</li>
+<li>单例类必须能向其他对象提供这一实例</li>
 </ol>
-<p>所谓同步，就是在发出一个<em>调用</em>时，在没有得到结果之前，该<em>调用</em>就不返回。但是一旦调用返回，就得到返回值了。换句话说，就是由<em>调用者</em>主动等待这个<em>调用</em>的结果。而异步则是相反，<em>调用</em>在发出之后，这个调用就直接返回了，所以没有返回结果。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在<em>调用</em>发出后，<em>被调用者</em>通过状态、通知来通知调用者，或通过回调函数处理这个调用。</p>
-<ol>
-<li>阻塞/非阻塞<br>阻塞和非阻塞关注的是程序在等待调用结果（消息，返回值）时的状态.</li>
+<h5 id="单例模式VS静态类"><a href="#单例模式VS静态类" class="headerlink" title="单例模式VS静态类"></a>单例模式VS静态类</h5><ol>
+<li>单例可以继承和被继承，方法可以被override，而静态方法不可以。</li>
+<li>静态方法中产生的对象会在执行后被释放，进而被GC清理，不会一直存在于内存中。</li>
+<li>静态类会在第一次运行时初始化，单例模式可以有其他的选择，即可以延迟加载。</li>
+<li>基于2， 3条，由于单例对象往往存在于DAO层（例如sessionFactory），如果反复的初始化和释放，则会占用很多资源，而使用单例模式将其常驻于内存可以更加节约资源。</li>
+<li>静态方法有更高的访问效率。</li>
+<li>单例模式很容易被测试。</li>
 </ol>
-<p>阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
-<p>最后，取unix network programming中IO复用：select/poll函数一章中的描述来讲解一下具体的IO模型。在Unix中，提供了5种IO模型，分别是：</p>
-<ul>
-<li>阻塞式IO</li>
-<li>非阻塞式IO</li>
-<li>IO复用模型(select/poll)</li>
-<li>信号驱动式IO（SIGIO）</li>
-<li>异步IO （<a href="&quot;http://baike.baidu.com/link?url=zfUmGKhvQdazvfJfitDpLlOTCUnocFw6u4iUoyp3DxmvdifDPX6l-ZBgnYvur520tIz19L8kOCluFqsZnDyiZK&quot;" title="Portable Operating System Interface of UNIX，缩写为 POSIX ">POSIX</a>的aio_系列函数）</li>
-</ul>
-<ol>
-<li><p>阻塞式IO模式</p>
-<p> <img src="/2016/05/26/iomodels/blockingio.png" alt="blockingiomodel"></p>
-<p>  进程调用recvfrom, 系统调用直到数据报到达并复制到缓冲区中或者发生错误才会返回，因此说进程在调用recvfrom开始即被阻塞，直到数据返回成功进程才开始处理数据报。</p>
-</li>
-<li><p>非阻塞式IO</p>
-<p> <img src="/2016/05/26/iomodels/nonblockingio.png" alt="nonblockingiomodel"></p>
-<p> 前三次调用recvfrom时并没有数据返回，因此内核返回一个EWOULDBLOCK的错误，第四次调用recvfrom时因数据报已准备好，复制数据到应用缓冲区，并成功返回。当一个进程不断对一个非阻塞描述符循环调用recvfrom时，则称之为轮询（polling）</p>
-</li>
-<li><p>IO复用模型</p>
-<p> IO复用（IO Multiplexing）, 可使用select/poll，使阻塞真正发生在select/poll端，而非真正的IO系统调用上。如下图所示：</p>
-<p> <img src="/2016/05/26/iomodels/iomultiplexing.png" alt="iomultiplexing"></p>
-<p> 真正的阻塞发生在select端，select端为recvfrom返回可读条件，recvfrom收到条件时进行数据报复制到缓冲区的操作。select允许有多个描述符，因此提供了更好的并发特性。</p>
-</li>
-<li><p>信号驱动式IO</p>
-<p> 使用信号，让内核在描述符就绪时发送SIGIO信号通知我们，如下图所示：</p>
-<p> <img src="/2016/05/26/iomodels/signal-drivenio.png" alt="signal-drivenio"></p>
-<p> 通过开启socket的信号驱动式IO功能，通过sigaction系统安装信号处理函数，系统调用将立即返回，进程没有被阻塞。当内核发送数据已准备好的SIGIO信号时，由信号处理函数继续处理。优势在于等待数据报到达期间不需要阻塞。</p>
-</li>
-<li><p>异步IO模型</p>
-<p> 根据POSIX标准所提供的一系列函数，提供了如下工作机制：告知内核启动某个操作，并让内核在整个操作（包括数据从内核复制到用户自己缓冲区）完成后通知我们。与信号驱动IO的区别主要在于通知的时间，信号驱动通知我们何时可以启动一个IO操作，而异步IO是由内核通知我们IO操作何时完成。</p>
-<p>  <img src="/2016/05/26/iomodels/aio.png" alt="aio"></p>
-</li>
-</ol>
-<ul>
-<li><p>对比</p>
-<p>  <img src="/2016/05/26/iomodels/iocompare.png" alt="iocompare"></p>
-<p>  如上图所示， 前四种io模型的区别主要在于第一阶段，第二阶段都是要完成数据从内核到缓冲区的复制；而异步IO模型在两个阶段都需要进行处理。</p>
-<ul>
-<li>同步IO操作（synchronous I/O operation）：导致请求进程阻塞，直到I/O操作完成；</li>
-<li><p>异步IO操作 (asynchronous I/O operation)：不导致进程的阻塞；</p>
-<p>因此前四种IO均为同步IO， 只有第五种为异步IO。</p>
-</li>
-</ul>
-</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">几个关于静态类的误解：</div><div class="line"></div><div class="line">误解一：静态方法常驻内存而实例方法不是。</div><div class="line"></div><div class="line">实际上，特殊编写的实例方法可以常驻内存，而静态方法需要不断初始化和释放。</div><div class="line"></div><div class="line">误解二：静态方法在堆(heap)上，实例方法在栈(stack)上。</div><div class="line"></div><div class="line">实际上，都是加载到特殊的不可写的代码内存区域中。</div><div class="line"></div><div class="line">静态类和单例模式情景的选择：</div><div class="line"></div><div class="line">情景一：不需要维持任何状态，仅仅用于全局访问，此时更适合使用静态类。</div><div class="line"></div><div class="line">情景二：需要维持一些特定的状态，此时更适合使用单例模式。</div></pre></td></tr></table></figure>
+<h5 id="单例模式的实现"><a href="#单例模式的实现" class="headerlink" title="单例模式的实现"></a>单例模式的实现</h5><p><strong><em>1. 懒汉模式</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</div><div class="line">  	<span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</div><div class="line">            instance = <span class="keyword">new</span> Singleton();</div><div class="line">        &#125;</div><div class="line">      	<span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  问题：具备很好的lazy loading，但多线程下不能正常工作。</p>
+<p><strong><em>2. 线程安全的懒汉模式</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> Singleton&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</div><div class="line">            instance = <span class="keyword">new</span> Singleton();</div><div class="line">        &#125;</div><div class="line">      	<span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种写法能够在多线程中很好的工作，而且看起来它也具备很好的lazy loading，但是，遗憾的是，效率很低，<strong><em>99%</em></strong>情况下不需要同步。</p>
+<p><strong><em>3. 饿汉模式</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> Singleton&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line">  	<span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方式基于<strong><em>classloder</em></strong>机制避免了多线程的同步问题，不过，instance在类装载时就实例化，虽然导致类装载的原因有很多种，在单例模式中大多数都是调用getInstance方法， 但是也不能确定有其他的方式（或者其他的静态方法）导致类装载，这时候初始化instance显然没有达到lazy loading的效果。<br><strong><em>4. 双重校验方法</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> Singleton&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>; <span class="comment">//注意volatile关键字</span></div><div class="line">   	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</div><div class="line">            <span class="keyword">synchronized</span>(Singleton.class)&#123;</div><div class="line">                <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</div><div class="line">                    instance = <span class="keyword">new</span> Singleton();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">      	<span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​       <strong>volatile</strong>关键字有何意义？Java语言提供了一种稍弱的同步机制，即volatile变量，用来确保将变量的更新操作通知到其他线程。当把变量声明为volatile类型后，编译器与运行时都会注意到这个变量是共享的，因此不会将该变量上的操作与其他内存操作一起重排序。volatile变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取volatile类型的变量时总会返回最新写入的值。</p>
+<p>　　当对非 volatile 变量进行读写的时候，每个线程先从内存拷贝变量到CPU缓存中。如果计算机有多个CPU，每个线程可能在不同的CPU上被处理，这意味着每个线程可以拷贝到不同的 CPU cache 中。</p>
+<p>​    <img src="/2016/02/26/singletonlearn/java_memory.png" alt=""></p>
+<p>　　而声明变量是 volatile 的，JVM 保证了每次读变量都从内存中读，跳过 CPU cache 这一步。    </p>
+<p>​      <strong><em>Java中的指令重排优化</em></strong>：所谓指令重排优化是指在不改变原语义的情况下，通过调整指令的执行顺序让程序运行的更快。JVM中并没有规定编译器优化相关的内容，也就是说JVM可以自由的进行指令重排序的优化。</p>
+<p>​       这个问题的关键就在于由于指令重排优化的存在，导致初始化Singleton和将对象地址赋给instance字段的顺序是不确定的。在某个线程创建单例对象时，在构造方法被调用之前，就为该对象分配了内存空间并将对象的字段设置为默认值。此时就可以将分配的内存地址赋值给instance字段了，然而该对象可能还没有初始化。若紧接着另外一个线程来调用getInstance，取到的就是状态不正确的对象，程序就会出错，因此利用volatile禁止指令重排序</p>
+<p><strong><em>5. 静态内部类</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span></span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> SingletonHolder.instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​       这种方式同样利用了类加载机制来保证只创建一个instance实例。它与饿汉模式一样，也是利用了<strong><em>classloder</em></strong>机制，因此不存在多线程并发的问题。不一样的是，它是在内部类里面去创建对象实例。这样的话，只要应用中不使用内部类，JVM就不会去加载这个单例类，也就不会创建单例对象，从而实现懒汉式的延迟加载。也就是说这种方式可以同时保证<strong>延迟加载</strong>和<strong>线程安全</strong>。</p>
+<p><strong><em>6. 枚举</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumSingleton</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">EnumSingeton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EnumSingleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> Singleton.INSTANCE.getInstance();</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">  	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">enum</span> Singleton&#123;</div><div class="line">        INSTANCE;</div><div class="line">      	<span class="keyword">private</span> EnumSingleton singleton;</div><div class="line">      	<span class="comment">//JVM会保证此方法绝对只调用一次</span></div><div class="line">      	<span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;</div><div class="line">            singleton = <span class="keyword">new</span> EnumSingleton();</div><div class="line">        &#125;</div><div class="line">      	<span class="function"><span class="keyword">public</span> EnumSingleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="keyword">return</span> singleton;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>传统的两私有一公开（私有构造方法、私有静态实例(懒实例化/直接实例化)、公开的静态获取方法）涉及线程安全问题（即使有多重检查锁也可以通过反射破坏单例），</p>
+<p>目前最为安全的实现单例的方法是通过<strong>内部静态enum</strong>的方法来实现，因为JVM会保证enum不能被反射并且构造器方法只执行一次。这也是《Effective Java》所提倡的方法。</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;理解同步与异步、阻塞与非阻塞&quot;&gt;&lt;a href=&quot;#理解同步与异步、阻塞与非阻塞&quot; class=&quot;headerlink&quot; title=&quot;理解同步与异步、阻塞与非阻塞&quot;&gt;&lt;/a&gt;理解同步与异步、阻塞与非阻塞&lt;/h1&gt;&lt;p&gt;对于大部分服务端应用的开发，都会或多或少涉及
+      &lt;h4 id=&quot;单例模式Singleton-看似简单，内藏玄机&quot;&gt;&lt;a href=&quot;#单例模式Singleton-看似简单，内藏玄机&quot; class=&quot;headerlink&quot; title=&quot;单例模式Singleton-看似简单，内藏玄机&quot;&gt;&lt;/a&gt;单例模式Singleton-看似简
     
     </summary>
     
-      <category term="Concurrency" scheme="http://haiguangbo.github.io/categories/Concurrency/"/>
+      <category term="Design Pattern" scheme="http://haiguangbo.github.io/categories/Design-Pattern/"/>
     
-      <category term="Note" scheme="http://haiguangbo.github.io/categories/Concurrency/Note/"/>
+      <category term="Note" scheme="http://haiguangbo.github.io/categories/Design-Pattern/Note/"/>
     
     
-      <category term="IO" scheme="http://haiguangbo.github.io/tags/IO/"/>
+      <category term="Note" scheme="http://haiguangbo.github.io/tags/Note/"/>
+    
+      <category term="Design Pattern" scheme="http://haiguangbo.github.io/tags/Design-Pattern/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL数据操作-数据查重与去重</title>
+    <link href="http://haiguangbo.github.io/2016/01/26/mysqlnote1/"/>
+    <id>http://haiguangbo.github.io/2016/01/26/mysqlnote1/</id>
+    <published>2016-01-26T12:00:00.000Z</published>
+    <updated>2017-10-09T02:58:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="MySQL查询重复记录的方法"><a href="#MySQL查询重复记录的方法" class="headerlink" title="MySQL查询重复记录的方法"></a>MySQL查询重复记录的方法</h1><p><strong>MySQL</strong>中重复的数据记录有时会为我们带来困扰，因此查询并处理重复数据显得尤为重要。</p>
+<ol>
+<li><p>查找表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from people   </div><div class="line">where peopleId in </div><div class="line">(select peopleId from people group by peopleId having count(peopleId) &gt; 1</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断，只留有rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from people   </div><div class="line">where peopleId in (select peopleId from people group by peopleId   having count(peopleId) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from people group by peopleId having count(peopleId )&gt;1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>查找表中多余的重复记录(多个字段)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除表中多余的重复记录（多个字段），只留有rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">delete from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
+</li>
+<li><p>查找表中多余的重复记录（多个字段），不包含rowid最小的记录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">select * from vitae a   </div><div class="line">where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) &gt; 1)   </div><div class="line">and rowid not in (select min(rowid) from vitae group by peopleId,seq having count(*)&gt;1)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;MySQL查询重复记录的方法&quot;&gt;&lt;a href=&quot;#MySQL查询重复记录的方法&quot; class=&quot;headerlink&quot; title=&quot;MySQL查询重复记录的方法&quot;&gt;&lt;/a&gt;MySQL查询重复记录的方法&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;MySQL&lt;/strong&gt;
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://haiguangbo.github.io/categories/MySQL/"/>
+    
+      <category term="Note" scheme="http://haiguangbo.github.io/categories/MySQL/Note/"/>
+    
+    
+      <category term="MySQL" scheme="http://haiguangbo.github.io/tags/MySQL/"/>
     
       <category term="Note" scheme="http://haiguangbo.github.io/tags/Note/"/>
     
@@ -118,7 +127,7 @@
     <link href="http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/"/>
     <id>http://haiguangbo.github.io/2016/01/26/javaconcurrencyinpracticenote/</id>
     <published>2016-01-26T12:00:00.000Z</published>
-    <updated>2017-05-19T04:26:37.000Z</updated>
+    <updated>2017-09-19T09:32:43.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="第一章-介绍"><a href="#第一章-介绍" class="headerlink" title="第一章 介绍"></a>第一章 介绍</h3><ol>
 <li><p>线程的优势：</p>
@@ -331,12 +340,8 @@ Executor框架有助于分离任务的提交和任务的执行策略，同时还
 <li>线程分为两种：普通线程和守护线程。两者的区别是：当一个线程退出时，所有仍然存在的守护线程都会被抛弃——不会执行finally块，也不会释放栈——JVM直接退出。</li>
 <li>管理资源避免使用finalizer。在大多数情况下，使用finally块和显式close方法结合来管理资源，会比使用finalizer起到更好的作用。</li>
 </ol>
-<p>总结</p>
-<pre><code>任务、线程、服务以及应用程序在生命周期结束时的问题，可能会导致向它们引入复杂的设计和实现。
-Java没有提供具有明显优势的机制来取消活动或者终结线程。
-它提供了协作的中断机制，能够用来帮助取消，但是这将取决你如何构建取消的协议，并是否能一致的使用该协议。
-使用FutureTask和Executor框架可以简化构建可取消的任务和服务。
-</code></pre><h3 id="第八章-应用线程池"><a href="#第八章-应用线程池" class="headerlink" title="第八章 应用线程池"></a>第八章 应用线程池</h3><ol>
+<p>总结<br>    任务、线程、服务以及应用程序在生命周期结束时的问题，可能会导致向它们引入复杂的设计和实现。<br>    Java没有提供具有明显优势的机制来取消活动或者终结线程。<br>    它提供了协作的中断机制，能够用来帮助取消，但是这将取决你如何构建取消的协议，并是否能一致的使用该协议。<br>    使用FutureTask和Executor框架可以简化构建可取消的任务和服务。</p>
+<h3 id="第八章-应用线程池"><a href="#第八章-应用线程池" class="headerlink" title="第八章 应用线程池"></a>第八章 应用线程池</h3><ol>
 <li>一些任务具有这样的特征：需要或者排斥某种特定的执行策略。对其他任务具有依赖性的任务，就会要求线程池足够大，来保证任务不必排队或者不被拒绝；采用线程限制的任务需要顺序的执行。把这些需求都写入文档，这样将来的维护者就不会使用一个与原来相悖的执行策略，而破坏安全性或活性。</li>
 <li>在线程池中，如果一个任务依赖其他任务的执行，而线程池不是足够大，这时就可能出现线程饥饿和死锁。<br>无论何时，你提交一个非独立的Executor任务，要明确出现线程饥饿和死锁的可能性，并且在代码或者配置文件以及其他可以配置Executor的地方，任务有关池的大小和配置约束都要写入文档。<br>耗时任务会造成线程池堵塞，还会拖长服务时间，即使小任务也不能幸免。有一项技术可以用来缓解好使操作带来的影响，这就是限定任务等待资源的时间，而不是无限制地等待下去。</li>
 <li>为了正确地定制线程池的长度，你需要理解你的计算环境、资源预算和任务的自身特性。如果你有不同类型的任务，它们拥有差别很大的行为，那么请考虑使用多个线程池，这样每个线程池可以根据不同任务的工作负载进行调节。对于计算密集型的任务，一个有Ncpu个处理器的系统通常通过使用一个Ncpu+1个线程的线程池来获得最优的利用率。你可以使用Runtime来获得CPU的数目：int N_CPUS = Runtime.getRuntime().availableProcessors()。</li>
@@ -360,10 +365,8 @@ Java没有提供具有明显优势的机制来取消活动或者终结线程。
 <li>如果一个数据模型必须被多个线程共享，而且实现一个线程安全模型的尝试却由于阻塞、一致性、或者复杂度等原因而失败，这时可以考虑运用分拆模型设计。</li>
 <li>线程限制不仅仅限制在GUI系统；无论何时，它都可以用作实现单线程化子系统的便利工具。</li>
 </ol>
-<p>总结</p>
-<pre><code>GUI框架几乎都是作为单线程化子系统实现的，所有与表现相关的代码都作为任务在一个事件线程中运行。
-因为只有唯一一个线程，耗时任务会损害响应性，所以它们应该在后台线程中运行。
-</code></pre><h3 id="第十章-避免活性危险"><a href="#第十章-避免活性危险" class="headerlink" title="第十章 避免活性危险"></a>第十章 避免活性危险</h3><ol>
+<p>总结<br>​<br>    GUI框架几乎都是作为单线程化子系统实现的，所有与表现相关的代码都作为任务在一个事件线程中运行。<br>    因为只有唯一一个线程，耗时任务会损害响应性，所以它们应该在后台线程中运行。</p>
+<h3 id="第十章-避免活性危险"><a href="#第十章-避免活性危险" class="headerlink" title="第十章 避免活性危险"></a>第十章 避免活性危险</h3><ol>
 <li>如果所有线程以通用的固定的顺序获得锁，程序就不会出现锁顺序死锁（由于锁顺序而出现死锁）问题了。</li>
 <li>在持有锁的时候调用外部方法是在挑战活性问题。外部方法可能会获得其他锁（产生死锁的风险），或者遭遇严重超时的阻塞，当你持有锁的时候会延迟其他试图获得该锁的线程。</li>
 <li>在持有锁的时候调用一个外部方法很难进行分析，因此是危险的。当调用的方法不需要持有锁时，这被称为开放调用，依赖于开放调用的类会具有更好的行为。</li>
@@ -468,7 +471,7 @@ Amdahl定律告诉我们，程序的可扩张性是由必须连续执行的代�
 <li>当调用wait、notify或者notifyAll时，要持有与条件队列相关联的锁；并且，在检查条件谓词之后、开始执行被保护的逻辑之前，不要释放锁。</li>
 <li>当一个线程等待的特定条件已经为真，但是进入等待前检查条件谓词却返回了假，我们称这样就出现了一个丢失的信号。即条件为真时，没有唤醒在等待的线程。</li>
 <li>无论何时，当你在等待一个条件，一定要确保有人会在条件谓词变为真时通知你。</li>
-<li>等待唤醒时，注意notify和notifyAll的区别。notify()和notifyAll()都是Object对象用于通知处在等待该对象的线程的方法。两者的最大区别在于：<br> notifyAll使所有原来在该对象上等待被notify的线程统统退出wait的状态，变成等待该对象上的锁，一旦该对象被解锁，他们就会去竞争。notify则文明得多他只是选择一个wait状态线程进行通知，并使它获得该对象上的锁，但不惊动其他同样在等待被该对象notify的线程们，当第一个线程运行完毕以后释放对象上的锁此时如果该对象没有再次使用notify语句，则即便该对象已经空闲，其他wait状态等待的线程由于没有得到该对象的通知，继续处在wait状态，直到这个对象发出一个notify或notifyAll，它们等待的是被notify或notifyAll，而不是锁。</li>
+<li>等待唤醒时，注意notify和notifyAll的区别。notify()和notifyAll()都是Object对象用于通知处在等待该对象的线程的方法。两者的最大区别在于：<br>notifyAll使所有原来在该对象上等待被notify的线程统统退出wait的状态，变成等待该对象上的锁，一旦该对象被解锁，他们就会去竞争。notify则文明得多他只是选择一个wait状态线程进行通知，并使它获得该对象上的锁，但不惊动其他同样在等待被该对象notify的线程们，当第一个线程运行完毕以后释放对象上的锁此时如果该对象没有再次使用notify语句，则即便该对象已经空闲，其他wait状态等待的线程由于没有得到该对象的通知，继续处在wait状态，直到这个对象发出一个notify或notifyAll，它们等待的是被notify或notifyAll，而不是锁。</li>
 <li>一个依赖于状态的类，要么完全将它的等待和通知协议暴露（并文档化）给子类，要么完全阻止子类参与其中。</li>
 <li>危险警告：wait、notify和notifyAll在Condtion对象中的对等体是await、signal和signalAll，但是，Condition继承于Object，这意味着它也有wait和notify方法，一定要确保使用了正确的版本——await和signal。</li>
 <li>Java.util.concurrent中很多可阻塞的类，比如ReentrantLock、Semaphore、ReentrantReadWriteLock、CountDownLatch、SynchronousQueue和FutureTask，全部是用AbstractQueueSynchronizer构建的。</li>
